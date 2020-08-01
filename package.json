@@ -1,0 +1,20 @@
+{
+  "name": "one-click-apps",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "rm -rf ./dist/ && mkdir -p dist && node ./scripts/build_one_click_apps.js",
+    "validate": "node ./scripts/validate_json.js",
+    "publish": "npm run build && ./scripts/publish-from-actions.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:wind2sing/one-click-apps.git"
+  },
+  "keywords": [],
+  "author": "wind2sing",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1"
+  }
+}
