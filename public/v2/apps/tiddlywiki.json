@@ -1,0 +1,61 @@
+{
+  "captainVersion": "2",
+  "documentation": "TiddlyWiki is a personal wiki and a non-linear notebook",
+  "displayName": "TiddlyWiki",
+  "description": "TiddlyWiki is a personal wiki and a non-linear notebook for organising and sharing complex information",
+  "dockerCompose": {
+    "version": "3.3",
+    "services": {
+      "$$cap_appname": {
+        "dockerfileLines": [
+          "FROM node:11.15.0-alpine",
+          "RUN npm install -g tiddlywiki",
+          "VOLUME /tiddlywiki",
+          "WORKDIR /tiddlywiki",
+          "EXPOSE 8080",
+          "ENV TW_WIKINAME $$cap_wikiname",
+          "RUN echo '([ -d \"./${TW_WIKINAME}\" ] && [ \"$(ls -A ./${TW_WIKINAME})\" ]) && echo || tiddlywiki ./${TW_WIKINAME} --init server && echo \"wikiname: ${TW_WIKINAME}\" && tiddlywiki --version && tiddlywiki ./${TW_WIKINAME} --listen $@' >> /run.sh && cat /run.sh",
+          "CMD sh /run.sh host=0.0.0.0 username=$$cap_username password=$$cap_password writers='$$cap_writers' readers='$$cap_readers'"
+        ],
+        "containerHttpPort": "8080",
+        "restart": "always",
+        "volumes": ["$$cap_appname-data:/tiddlywiki"]
+      }
+    }
+  },
+  "instructions": {
+    "start": "TiddlyWiki is a personal wiki and a non-linear notebook for organising and sharing complex information. It is an open-source single page application wiki in the form of a single HTML file that includes CSS, JavaScript, and the content. It is designed to be easy to customize and re-shape depending on application. It facilitates re-use of content by dividing it into small pieces called Tiddlers.",
+    "end": "You TiddlyWiki is deployed; it might take a minute to be ready. See https://$$cap_appname.$$cap_root_domain/#HelloThere to get started."
+  },
+  "variables": [
+    {
+      "id": "$$cap_username",
+      "label": "Username",
+      "defaultValue": "anonymous",
+      "description": "Username for authentication (leave blank for a public wiki)"
+    },
+    {
+      "id": "$$cap_password",
+      "label": "Password",
+      "description": "Password for authentication (leave blank for a public wiki)"
+    },
+    {
+      "id": "$$cap_wikiname",
+      "label": "Wiki Name",
+      "defaultValue": "mywiki",
+      "description": "The folder for your wiki under /tiddlywiki"
+    },
+    {
+      "id": "$$cap_writers",
+      "label": "writers",
+      "description": "comma separated list of principals allowed to read from this wiki",
+      "defaultValue": "(authenticated)"
+    },
+    {
+      "id": "$$cap_readers",
+      "label": "readers",
+      "description": "comma separated list of principals allowed to write to this wiki",
+      "defaultValue": "(anon)"
+    }
+  ]
+}
