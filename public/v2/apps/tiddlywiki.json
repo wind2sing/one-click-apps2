@@ -55,7 +55,7 @@
       "id": "$$cap_readers",
       "label": "readers",
       "description": "comma separated list of principals allowed to write to this wiki",
-      "defaultValue": "(anon)"
+      "defaultValue": "(authenticated)"
     }
   ]
 }
