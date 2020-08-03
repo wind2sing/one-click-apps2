@@ -12,8 +12,8 @@
         "restart": "always",
         "volumes": ["$$cap_appname-data:/tiddlywiki"],
         "environment": {
-          "TW_USERNAME": "$$cap_wikusername",
-          "TW_PASSWORD": "$$cap_wikipassword",
+          "TW_USERNAME": "$$cap_username",
+          "TW_PASSWORD": "$$cap_password",
           "TW_WRITERS": "$$cap_writers",
           "TW_READERS": "$$cap_readers",
           "TW_WIKINAME": "$$cap_wikiname"
