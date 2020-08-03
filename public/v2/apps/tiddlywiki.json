@@ -1,25 +1,23 @@
 {
   "captainVersion": "2",
-  "documentation": "TiddlyWiki is a personal wiki and a non-linear notebook",
+  "documentation": "Based on https://hub.docker.com/r/wind2sing/tiddlywiki",
   "displayName": "TiddlyWiki",
   "description": "TiddlyWiki is a personal wiki and a non-linear notebook for organising and sharing complex information",
   "dockerCompose": {
     "version": "3.3",
     "services": {
       "$$cap_appname": {
-        "dockerfileLines": [
-          "FROM node:11.15.0-alpine",
-          "RUN npm install -g tiddlywiki",
-          "VOLUME /tiddlywiki",
-          "WORKDIR /tiddlywiki",
-          "EXPOSE 8080",
-          "ENV TW_WIKINAME $$cap_wikiname",
-          "RUN echo '([ -d \"./${TW_WIKINAME}\" ] && [ \"$(ls -A ./${TW_WIKINAME})\" ]) && echo || tiddlywiki ./${TW_WIKINAME} --init server && echo \"wikiname: ${TW_WIKINAME}\" && tiddlywiki --version && tiddlywiki ./${TW_WIKINAME} --listen $@' >> /run.sh && cat /run.sh",
-          "CMD sh /run.sh host=0.0.0.0 username=$$cap_username password=$$cap_password writers='$$cap_writers' readers='$$cap_readers'"
-        ],
+        "image": "wind2sing/tiddlywiki:$$cap_imageversion",
         "containerHttpPort": "8080",
         "restart": "always",
-        "volumes": ["$$cap_appname-data:/tiddlywiki"]
+        "volumes": ["$$cap_appname-data:/tiddlywiki"],
+        "environment": {
+          "TW_USERNAME": "$$cap_wikusername",
+          "TW_PASSWORD": "$$cap_wikipassword",
+          "TW_WRITERS": "$$cap_writers",
+          "TW_READERS": "$$cap_readers",
+          "TW_WIKINAME": "$$cap_wikiname"
+        }
       }
     }
   },
@@ -29,21 +27,27 @@
   },
   "variables": [
     {
+      "id": "$$cap_imageversion",
+      "label": "Image Version",
+      "defaultValue": "latest",
+      "description": "Docker image version from https://hub.docker.com/r/wind2sing/tiddlywiki"
+    },
+    {
       "id": "$$cap_username",
       "label": "Username",
       "defaultValue": "anonymous",
-      "description": "Username for authentication (leave blank for a public wiki)"
+      "description": "Username for authentication"
     },
     {
       "id": "$$cap_password",
       "label": "Password",
-      "description": "Password for authentication (leave blank for a public wiki)"
+      "description": "Password for authentication"
     },
     {
       "id": "$$cap_wikiname",
       "label": "Wiki Name",
       "defaultValue": "mywiki",
-      "description": "The folder for your wiki under /tiddlywiki"
+      "description": "The name for your wiki folder under /tiddlywiki"
     },
     {
       "id": "$$cap_writers",
