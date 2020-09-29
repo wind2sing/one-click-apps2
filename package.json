@@ -1,20 +1,28 @@
 {
-  "name": "one-click-apps",
+  "name": "caprover-one-click-apps",
   "version": "1.0.0",
-  "description": "",
+  "description": "One Click App Repository for CapRover",
   "scripts": {
-    "build": "rm -rf ./dist/ && mkdir -p dist && node ./scripts/build_one_click_apps.js",
-    "validate": "node ./scripts/validate_json.js",
+    "formatter": "prettier --check './public/**/*.(json|yml)'",
+    "formatter-write": "prettier --write './public/**/*.(json|yml)'",
+    "build": "rm -rf ./dist/ && mkdir -p dist && node ./scripts/build_one_click_apps.js && node ./scripts/build_one_click_apps_from_v4.js",
+    "validate_apps": "node ./scripts/validate_apps.js",
     "publish": "npm run build && ./scripts/publish-from-actions.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:wind2sing/one-click-apps.git"
+    "url": "git+https://github.com/caprover/one-click-apps.git"
   },
-  "keywords": [],
-  "author": "wind2sing",
+  "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caprover/one-click-apps/issues"
+  },
+  "homepage": "https://github.com/caprover/one-click-apps",
   "dependencies": {
-    "fs-extra": "^9.0.1"
+    "fs-extra": "^9.0.1",
+    "gh-pages": "^3.1.0",
+    "prettier": "^2.0.5",
+    "yaml": "^1.10.0"
   }
 }

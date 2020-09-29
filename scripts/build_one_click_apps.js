@@ -1,13 +1,28 @@
 /*jshint esversion: 6 */
 const path = require('path');
+const yaml = require('yaml');
 const fs = require('fs-extra');
+
+// Next, for V4:
+// ============================================================================
+// ============================================================================
+// *********** THIS IS ONLY TO BE DONE AFTER CAPROVER 1.8 RELEASE *************
+// ============================================================================
+// ============================================================================
+// 
+// 1- DUPLICATE this script. The new script is to ONLY read from /public/v4/*.yaml
+// 2- Test with a new YAML file
+// 3- Write script to convert all v2 JSON to V4 yaml and place them in /public/v4/*.yaml
+// 4- Update readme!!!!
+// 5- Push all 3 steps above at the same time to GITHUB
 
 const pathOfPublic = path.join(__dirname, '..', `public`);
 
 const pathOfDist = path.join(__dirname, '..', `dist`);
-//  const pathOfDistV1 = path.join(pathOfDist, 'v1');
+
 const pathOfDistV2 = path.join(pathOfDist, 'v2');
 const pathOfDistV3 = path.join(pathOfDist, 'v3');
+const pathOfDistV4 = path.join(pathOfDist, 'v4');
 
 const pathOfSourceDirectory = path.join(pathOfPublic, 'v2');
 const pathOfSourceDirectoryApps = path.join(pathOfSourceDirectory, 'apps');
@@ -36,6 +51,7 @@ function createAppList(appsList, pathOfApps) {
                 name: apps[i],
                 displayName: content.displayName,
                 description: content.description,
+                isOfficial: `${content.isOfficial}`.toLowerCase() === 'true',
                 logoUrl: apps[i] + '.png'
             };
         } else {
@@ -50,18 +66,84 @@ function createAppList(appsList, pathOfApps) {
     };
 }
 
+function convertV2toV4(v2String) {
+    const parsed = JSON.parse(v2String);
+    if (`${parsed.captainVersion}` !== '2') {
+        throw new Error('CaptainVersion must be 2 for this conversion');
+    }
+
+    function moveProperty(propertyName) {
+        parsed.caproverOneClickApp[propertyName] = parsed[propertyName];
+        parsed[propertyName] = undefined;
+    }
+
+    parsed.services = parsed.dockerCompose.services;
+    parsed.dockerCompose = undefined;
+
+    parsed.captainVersion = 4;
+    parsed.caproverOneClickApp = {};
+
+    moveProperty('variables');
+    moveProperty('instructions');
+    moveProperty('displayName');
+    moveProperty('isOfficial');
+    moveProperty('description');
+    moveProperty('documentation');
+
+    Object.keys(parsed.services).forEach(serviceName => {
+        const service = parsed.services[serviceName];
+        if (service.containerHttpPort) {
+            service.caproverExtra = service.caproverExtra || {};
+            service.caproverExtra.containerHttpPort = service.containerHttpPort;
+        }
+        if (service.dockerfileLines) {
+            service.caproverExtra = service.caproverExtra || {};
+            service.caproverExtra.dockerfileLines = service.dockerfileLines;
+        }
+        if (service.notExposeAsWebApp) {
+            service.caproverExtra = service.caproverExtra || {};
+            service.caproverExtra.notExposeAsWebApp = service.notExposeAsWebApp;
+        }
+        service.containerHttpPort = undefined;
+        service.dockerfileLines = undefined;
+        service.notExposeAsWebApp = undefined;
+    });
+
+    return parsed;
+}
+
 
 function buildDist() {
-    return fs.readdir(pathOfSourceDirectoryApps)
+    return Promise.resolve()
+        .then(function () {
+            if (!fs.existsSync(pathOfSourceDirectoryApps)) {
+                return [];
+            }
+            return fs.readdir(pathOfSourceDirectoryApps);
+        })
         .then(function (appsFileNames) { // [ app1.json app2.json .... ]
 
+            if (appsFileNames.length === 0) {
+                return;
+            }
+
             appsFileNames.forEach(appFileName => {
-                fs.copySync(path.join(pathOfSourceDirectoryApps, appFileName), path.join(pathOfDistV2, `apps`, appFileName));
-                fs.copySync(path.join(pathOfSourceDirectoryApps, appFileName), path.join(pathOfDistV3, `apps`, appFileName.split('.')[0]));
+                const pathOfAppFileInSource = path.join(pathOfSourceDirectoryApps, appFileName);
+
+                //v2
+                fs.copySync(pathOfAppFileInSource, path.join(pathOfDistV2, `apps`, appFileName));
+
+                //v3
+                fs.copySync(pathOfAppFileInSource, path.join(pathOfDistV3, `apps`, appFileName.split('.')[0]));
+
+                //v4
+                const contentString = fs.readFileSync(pathOfAppFileInSource);
+                fs.outputJsonSync(path.join(pathOfDistV4, `apps`, appFileName.split('.')[0]), convertV2toV4(contentString));
             });
 
             fs.copySync(pathOfSourceDirectoryLogos, path.join(pathOfDistV2, `logos`));
             fs.copySync(pathOfSourceDirectoryLogos, path.join(pathOfDistV3, `logos`));
+            fs.copySync(pathOfSourceDirectoryLogos, path.join(pathOfDistV4, `logos`));
 
             const allAppsList = createAppList(appsFileNames, pathOfSourceDirectoryApps);
             const v3List = {
@@ -70,8 +152,7 @@ function buildDist() {
             fs.outputJsonSync(path.join(pathOfDistV2, 'autoGeneratedList.json'), allAppsList);
             fs.outputJsonSync(path.join(pathOfDistV2, 'list'), v3List); // TODO delete oneClickApps: 
             fs.outputJsonSync(path.join(pathOfDistV3, 'list'), v3List);
-        })
-        .then(function () {
+            fs.outputJsonSync(path.join(pathOfDistV4, 'list'), v3List);
             return fs.copySync(path.join(pathOfPublic, 'CNAME'), path.join(pathOfDist, 'CNAME'));
         });
 }
