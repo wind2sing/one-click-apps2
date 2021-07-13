@@ -1,10 +1,10 @@
 captainVersion: 4
 services:
   $$cap_appname:
-    image: sola97/v2-ui
+    image: stilleshan/v2-ui
     restart: always
     volumes:
-      - $$cap_appname-v2-ui:/etc/v2-ui
+      - $$cap_appname-data:/etc/v2-ui
     caproverExtra:
       containerHttpPort: "65432"
 caproverOneClickApp:
