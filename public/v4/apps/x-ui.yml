@@ -1,16 +1,16 @@
 captainVersion: 4
 services:
     $$cap_appname:
-        image: stilleshan/v2-ui
+        image: stilleshan/x-ui
         restart: always
         volumes:
-            - $$cap_appname-data:/etc/v2-ui
+            - $$cap_appname-data:/etc/x-ui
         caproverExtra:
             containerHttpPort: '65432'
 caproverOneClickApp:
     variables: []
     instructions:
-        start: V2-ui is a v2ray panel.
-        end: V2-ui is deployed and available as $$cap_appname
-    displayName: v2-ui
+        start: x-ui is a v2ray panel.
+        end: x-ui is deployed and available as $$cap_appname
+    displayName: x-ui
     description: Support multi-protocol multi-user v2ray panel.
