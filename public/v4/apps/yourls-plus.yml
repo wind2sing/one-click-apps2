@@ -1,35 +1,35 @@
 captainVersion: 4
 services:
-  $$cap_appname:
-    image: wind2sing/yourls
-    restart: always
-    environment:
-      YOURLS_DB_HOST: $$cap_yourls_db_host
-      YOURLS_DB_USER: $$cap_yourls_db_user
-      YOURLS_DB_PASS: $$cap_yourls_db_pass
-      YOURLS_SITE: https://$$cap_appname.$$cap_root_domain
-      YOURLS_USER: $$cap_yourls_user
-      YOURLS_PASS: $$cap_yourls_pass
-    caproverExtra:
-      containerHttpPort: "80"
+    $$cap_appname:
+        image: wind2sing/yourls
+        restart: always
+        environment:
+            YOURLS_DB_HOST: $$cap_yourls_db_host
+            YOURLS_DB_USER: $$cap_yourls_db_user
+            YOURLS_DB_PASS: $$cap_yourls_db_pass
+            YOURLS_SITE: https://$$cap_appname.$$cap_root_domain
+            YOURLS_USER: $$cap_yourls_user
+            YOURLS_PASS: $$cap_yourls_pass
+        caproverExtra:
+            containerHttpPort: '80'
 caproverOneClickApp:
-  variables:
-    - id: $$cap_yourls_db_host
-      label: External database host
-      defaultValue: srv-captain--maria-db
-    - id: $$cap_yourls_db_user
-      label: External MySQL username
-      defaultValue: root
-    - id: $$cap_yourls_db_pass
-      label: External MySQL password
-    - id: $$cap_yourls_user
-      label: yourls username
-      defaultValue: yourls
-    - id: $$cap_yourls_pass
-      label: yourls password
-      defaultValue: yourls
-  instructions:
-    start: Your Own URL Shortener with additional theme and plugins.(No database)
-    end: YOURLS is deployed and available as $$cap_appname. You need to Enable HTTPS or change Environmental Variable YOURLS_SITE.
-  displayName: YOURLS-plus
-  description: Your Own URL Shortener with additional theme and plugins.
+    variables:
+        - id: $$cap_yourls_db_host
+          label: External database host
+          defaultValue: srv-captain--maria-db
+        - id: $$cap_yourls_db_user
+          label: External MySQL username
+          defaultValue: root
+        - id: $$cap_yourls_db_pass
+          label: External MySQL password
+        - id: $$cap_yourls_user
+          label: yourls username
+          defaultValue: yourls
+        - id: $$cap_yourls_pass
+          label: yourls password
+          defaultValue: yourls
+    instructions:
+        start: Your Own URL Shortener with additional theme and plugins.(No database)
+        end: YOURLS is deployed and available as $$cap_appname. You need to Enable HTTPS or change Environmental Variable YOURLS_SITE.
+    displayName: YOURLS-plus
+    description: Your Own URL Shortener with additional theme and plugins.

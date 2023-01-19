@@ -1,18 +1,18 @@
 captainVersion: 4
 services:
-  $$cap_appname:
-    image: tindy2013/subconverter:$$cap_subconverter_version
-    restart: always
-    caproverExtra:
-      containerHttpPort: "25500"
+    $$cap_appname:
+        image: tindy2013/subconverter:$$cap_subconverter_version
+        restart: always
+        caproverExtra:
+            containerHttpPort: '25500'
 caproverOneClickApp:
-  variables:
-    - id: $$cap_subconverter_version
-      label: Subconverter Version Tag
-      defaultValue: 0.6.2
-  instructions:
-    start: Subconverter is a application to convert between various proxy subscription formats.
-    end: Subconverter is deployed and available as $$cap_appname
-  displayName: subconverter
-  description: Utility to convert between various proxy subscription formats.
-  documentation: "Taken from https://hub.docker.com/r/tindy2013/subconverter "
+    variables:
+        - id: $$cap_subconverter_version
+          label: Subconverter Version Tag
+          defaultValue: 0.7.2
+    instructions:
+        start: Subconverter is a application to convert between various proxy subscription formats.
+        end: Subconverter is deployed and available as $$cap_appname
+    displayName: subconverter
+    description: Utility to convert between various proxy subscription formats.
+    documentation: 'Taken from https://hub.docker.com/r/tindy2013/subconverter '

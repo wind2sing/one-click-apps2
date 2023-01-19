@@ -1,46 +1,46 @@
 captainVersion: 4
 services:
-  $$cap_appname:
-    image: wind2sing/tiddlywiki:$$cap_imageversion
-    restart: always
-    volumes:
-      - $$cap_appname-data:/tiddlywiki
-    environment:
-      TW_USERNAME: $$cap_username
-      TW_PASSWORD: $$cap_password
-      TW_WRITERS: $$cap_writers
-      TW_READERS: $$cap_readers
-      TW_WIKINAME: $$cap_wikiname
-    caproverExtra:
-      containerHttpPort: "8080"
+    $$cap_appname:
+        image: wind2sing/tiddlywiki:$$cap_imageversion
+        restart: always
+        volumes:
+            - $$cap_appname-data:/tiddlywiki
+        environment:
+            TW_USERNAME: $$cap_username
+            TW_PASSWORD: $$cap_password
+            TW_WRITERS: $$cap_writers
+            TW_READERS: $$cap_readers
+            TW_WIKINAME: $$cap_wikiname
+        caproverExtra:
+            containerHttpPort: '8080'
 caproverOneClickApp:
-  variables:
-    - id: $$cap_imageversion
-      label: Image Version
-      defaultValue: latest
-      description: Docker image version from https://hub.docker.com/r/wind2sing/tiddlywiki
-    - id: $$cap_username
-      label: Username
-      defaultValue: anonymous
-      description: Username for authentication
-    - id: $$cap_password
-      label: Password
-      description: Password for authentication
-    - id: $$cap_wikiname
-      label: Wiki Name
-      defaultValue: mywiki
-      description: The name for your wiki folder under /tiddlywiki
-    - id: $$cap_writers
-      label: writers
-      description: comma separated list of principals allowed to read from this wiki
-      defaultValue: (authenticated)
-    - id: $$cap_readers
-      label: readers
-      description: comma separated list of principals allowed to write to this wiki
-      defaultValue: (authenticated)
-  instructions:
-    start: TiddlyWiki is a personal wiki and a non-linear notebook for organising and sharing complex information. It is an open-source single page application wiki in the form of a single HTML file that includes CSS, JavaScript, and the content. It is designed to be easy to customize and re-shape depending on application. It facilitates re-use of content by dividing it into small pieces called Tiddlers.
-    end: You TiddlyWiki is deployed; it might take a minute to be ready. See https://$$cap_appname.$$cap_root_domain/#HelloThere to get started.
-  displayName: TiddlyWiki
-  description: TiddlyWiki is a personal wiki and a non-linear notebook for organising and sharing complex information
-  documentation: Based on https://hub.docker.com/r/wind2sing/tiddlywiki
+    variables:
+        - id: $$cap_imageversion
+          label: Image Version
+          defaultValue: latest
+          description: Docker image version from https://hub.docker.com/r/wind2sing/tiddlywiki
+        - id: $$cap_username
+          label: Username
+          defaultValue: anonymous
+          description: Username for authentication
+        - id: $$cap_password
+          label: Password
+          description: Password for authentication
+        - id: $$cap_wikiname
+          label: Wiki Name
+          defaultValue: mywiki
+          description: The name for your wiki folder under /tiddlywiki
+        - id: $$cap_writers
+          label: writers
+          description: comma separated list of principals allowed to read from this wiki
+          defaultValue: (authenticated)
+        - id: $$cap_readers
+          label: readers
+          description: comma separated list of principals allowed to write to this wiki
+          defaultValue: (authenticated)
+    instructions:
+        start: TiddlyWiki is a personal wiki and a non-linear notebook for organising and sharing complex information. It is an open-source single page application wiki in the form of a single HTML file that includes CSS, JavaScript, and the content. It is designed to be easy to customize and re-shape depending on application. It facilitates re-use of content by dividing it into small pieces called Tiddlers.
+        end: You TiddlyWiki is deployed; it might take a minute to be ready. See https://$$cap_appname.$$cap_root_domain/#HelloThere to get started.
+    displayName: TiddlyWiki
+    description: TiddlyWiki is a personal wiki and a non-linear notebook for organising and sharing complex information
+    documentation: Based on https://hub.docker.com/r/wind2sing/tiddlywiki
