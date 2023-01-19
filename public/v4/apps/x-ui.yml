@@ -5,8 +5,9 @@ services:
         restart: always
         volumes:
             - $$cap_appname-data:/etc/x-ui
+            - $$cap_appname-ssl:/ssl
         caproverExtra:
-            containerHttpPort: '65432'
+            containerHttpPort: '54321'
 caproverOneClickApp:
     variables: []
     instructions:
